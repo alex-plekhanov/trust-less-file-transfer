@@ -10,6 +10,7 @@
 
     <modules>
         <module>core</module>
+        <module>tlft-console</module>
     </modules>
 
     <packaging>pom</packaging>
