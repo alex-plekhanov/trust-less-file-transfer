@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>tlft</groupId>
+        <artifactId>trust-less-file-transfer</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>core</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.web3j</groupId>
+            <artifactId>core</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.web3j</groupId>
+                <artifactId>web3j-maven-plugin</artifactId>
+                <version>0.3.7</version>
+                <configuration>
+                    <packageName>solidity</packageName>
+                    <nativeJavaType>true</nativeJavaType>
+                    <outputFormat>java,bin</outputFormat>
+                    <soliditySourceFiles>
+                        <directory>src/main/resources</directory>
+                        <includes>
+                            <include>**/*.sol</include>
+                        </includes>
+                    </soliditySourceFiles>
+                    <outputDirectory>
+                        <java>src/main/java</java>
+                        <bin>target/solidity/bin</bin>
+                        <abi>target/solidity/abi</abi>
+                    </outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>
