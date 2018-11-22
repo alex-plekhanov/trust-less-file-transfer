@@ -1,8 +1,8 @@
-package dao;
+package tlft.dao;
 
 import java.util.Collection;
 import java.util.Map;
-import model.TransferContract;
+import tlft.model.TransferContract;
 
 public interface TransferContractDAO {
     /**
@@ -20,5 +20,5 @@ public interface TransferContractDAO {
      */
     TransferContract getTransferContract(String address);
 
-    Collection<TransferContract> getPendingContractChages();
+    Collection<TransferContract> getPendingContractChanges();
 }

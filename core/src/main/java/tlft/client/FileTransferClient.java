@@ -1,10 +1,10 @@
-package client;
+package tlft.client;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.function.Consumer;
-import model.Participant;
-import model.TransferContract;
+import tlft.model.Participant;
+import tlft.model.TransferContract;
 
 public interface FileTransferClient {
 
@@ -12,22 +12,26 @@ public interface FileTransferClient {
 
     void start(String accountFile, String password) throws Exception;
 
+    String getRootContractAddress() throws Exception;
+
+    String getMyParticipantAddress() throws Exception;
+
     void registerParticipant(String name) throws Exception;
 
-    Collection<Participant> getAllParticipants();
+    Collection<Participant> getAllParticipants() throws Exception;
 
     /**
      * @param address Participant address.
      */
-    Participant getParticipant(String address);
+    Participant getParticipant(String address) throws Exception;
 
     /**
      * Initiated by file sender.
-     *
      * @param file Transfered file.
      * @param receiver Receiver ethereum address.
+     * @return Contracts address.
      */
-    void initFileTransfer(File file, String receiver) throws Exception;
+    String initFileTransfer(File file, String receiver) throws Exception;
 
     /**
      * Initiated by file receiver.
@@ -57,11 +61,11 @@ public interface FileTransferClient {
 
     void addSecretKeyPublishedListener(Consumer<TransferContract> listener);
 
-    Collection<TransferContract> getFileTransferContracts(String sender, String receiver);
+    Collection<TransferContract> getFileTransferContracts(String sender, String receiver) throws Exception;
 
-    Collection<TransferContract> getMyFileTransferContracts();
+    Collection<TransferContract> getMyFileTransferContracts() throws Exception;
 
-    TransferContract getFileTransferContract(String address);
+    TransferContract getFileTransferContract(String address) throws Exception;
 
-    void stop();
+    void stop() throws Exception;
 }

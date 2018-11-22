@@ -1,7 +1,7 @@
 package tlft;
 
-import client.FileTransferClient;
-import client.FileTransferClientImpl;
+import tlft.client.FileTransferClient;
+import tlft.client.FileTransferClientImpl;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -10,7 +10,7 @@ import org.springframework.shell.standard.ShellOption;
 public class TlftShellCommands {
     private volatile FileTransferClient client;
 
-    @ShellMethod("Start file transfer client")
+    @ShellMethod("Start file transfer tlft.client")
     public void start(
         @ShellOption String accountFileName,
         @ShellOption String password,

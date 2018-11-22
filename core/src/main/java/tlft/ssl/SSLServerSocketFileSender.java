@@ -1,4 +1,4 @@
-package ssl;
+package tlft.ssl;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,8 +15,8 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
 import javax.security.cert.X509Certificate;
-import model.Participant;
-import model.TransferContract;
+import tlft.model.Participant;
+import tlft.model.TransferContract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,15 +24,14 @@ public class SSLServerSocketFileSender {
     private final Logger log = LoggerFactory.getLogger(SSLServerSocketFileSender.class);
     private final SSLContext sslContext;
     private final int port;
-    private Thread thread;
-    private SSLServerSocket serverSocket;
-    private File uploadDir;
-    private final Map<String, Participant> participants;
+    private volatile Thread thread;
+    private volatile SSLServerSocket serverSocket;
+    private final File uploadDir;
     private final Map<String, TransferContract> myContracts;
+    private volatile boolean stopping;
 
     public SSLServerSocketFileSender(Map<String, Participant> participants, Map<String, TransferContract> myContracts,
         KeyPair keyPair, String address, int port, File uploadDir) throws Exception {
-        this.participants = participants;
         this.myContracts = myContracts;
 
         java.security.cert.X509Certificate cert = X509CertUtils.generateCertificate("CN=" + address, keyPair);
@@ -54,7 +53,7 @@ public class SSLServerSocketFileSender {
         serverSocket = (SSLServerSocket)sslContext.getServerSocketFactory().createServerSocket(port);
         serverSocket.setNeedClientAuth(true);
 
-        thread = new Thread(() -> body());
+        thread = new Thread(() -> body(), "server-sender-" + port);
         thread.start();
     }
 
@@ -119,20 +118,24 @@ public class SSLServerSocketFileSender {
 
             }
             catch (Exception ex) {
-                log.error("Failed to process client request", ex);
-            }
+                if (stopping)
+                    return;
 
-            try {
-                Thread.sleep(100);
-            }
-            catch (InterruptedException e) {
-                return;
+                log.error("Failed to process tlft.client request", ex);
             }
         }
     }
 
-    public void stop() throws IOException {
-        serverSocket.close();
+    public void stop() throws InterruptedException {
+        stopping = true;
+
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            log.error("Failed to close socket", e);
+        }
+
         thread.interrupt();
+        thread.join();
     }
 }

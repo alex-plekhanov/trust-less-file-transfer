@@ -1,14 +1,13 @@
-package ssl;
+package tlft.ssl;
 
 import java.net.Socket;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.X509ExtendedTrustManager;
-import model.Participant;
+import tlft.model.Participant;
 
 public class X509MapBasedTrustManager extends X509ExtendedTrustManager {
     private final Map<String, Participant> acceptedParticipants;

@@ -1,14 +1,14 @@
-package dao;
+package tlft.dao;
 
-import client.FileTransferClientImpl;
+import tlft.client.FileTransferClientImpl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import model.ContractState;
-import model.TransferContract;
+import tlft.model.ContractState;
+import tlft.model.TransferContract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.web3j.abi.EventEncoder;
@@ -21,7 +21,7 @@ import org.web3j.protocol.core.methods.request.EthFilter;
 import rx.Subscription;
 import solidity.FileTransfer;
 import solidity.FileTransferRegistry;
-import util.CryptoUtil;
+import tlft.util.CryptoUtil;
 
 public class TransferContractDAOImpl implements TransferContractDAO {
     private final Logger log = LoggerFactory.getLogger(TransferContractDAOImpl.class);
@@ -29,8 +29,6 @@ public class TransferContractDAOImpl implements TransferContractDAO {
     private final Web3j web3j;
     private final FileTransferRegistry rootContract;
     private final Credentials credentials;
-
-    private Subscription subscription;
 
     private final Map<String, TransferContract> myContracts = new ConcurrentHashMap<>();
     private final Map<String, Collection<Subscription>> contractsSubscriptions = new ConcurrentHashMap<>();
@@ -50,10 +48,10 @@ public class TransferContractDAOImpl implements TransferContractDAO {
             rootContract.getContractAddress())
             .addSingleTopic(EventEncoder.encode(FileTransferRegistry.FILETRANSFERINITIATED_EVENT))
             .addOptionalTopics(encodeAddress(credentials.getAddress()), null)
-            .addOptionalTopics(null, credentials.getAddress())
+            .addOptionalTopics(null, encodeAddress(credentials.getAddress()))
             ;
 
-        subscription = rootContract
+        rootContract
             .fileTransferInitiatedEventObservable(filter)
             .subscribe(
                 event -> {
@@ -65,6 +63,7 @@ public class TransferContractDAOImpl implements TransferContractDAO {
             );
     }
 
+    /** {@inheritDoc} */
     @Override public Collection<TransferContract> getAllTransferContracts(String sender, String receiver) {
         Collection<TransferContract> contracts = new ArrayList<>();
 
@@ -88,10 +87,12 @@ public class TransferContractDAOImpl implements TransferContractDAO {
         return contracts;
     }
 
+    /** {@inheritDoc} */
     @Override public Map<String, TransferContract> getMyTransferContractsMap() {
         return myContracts;
     }
 
+    /** {@inheritDoc} */
     @Override public Collection<TransferContract> getMyTransferContracts() {
         return Collections.unmodifiableCollection(myContracts.values());
     }
@@ -259,6 +260,7 @@ public class TransferContractDAOImpl implements TransferContractDAO {
                 subscription.unsubscribe();
     }
 
+    /** {@inheritDoc} */
     @Override public TransferContract getTransferContract(String address) {
         TransferContract contract = myContracts.get(address);
 
@@ -268,7 +270,8 @@ public class TransferContractDAOImpl implements TransferContractDAO {
         return getTransferContract(address, null, null, false);
     }
 
-    @Override public Collection<TransferContract> getPendingContractChages() {
+    /** {@inheritDoc} */
+    @Override public Collection<TransferContract> getPendingContractChanges() {
         // Modifiable
         return pendingContractChanges.values();
     }

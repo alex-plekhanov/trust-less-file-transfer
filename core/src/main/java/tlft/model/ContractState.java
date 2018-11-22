@@ -1,4 +1,4 @@
-package model;
+package tlft.model;
 
 public enum  ContractState {
     INITIATED,

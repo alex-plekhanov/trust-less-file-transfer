@@ -1,17 +1,19 @@
-package model;
+package tlft.model;
+
+import java.util.Arrays;
 
 public class TransferContract {
-    String contractAddress;
-    String sender;
-    String receiver;
-    String fileName;
-    byte[] senderSign;
-    byte[] receiverSign;
-    byte[] secretKey;
-    ContractState state;
-    String discoveryHost;
-    int discoveryPort;
-    String reason;
+    private final String contractAddress;
+    private String sender;
+    private String receiver;
+    private String fileName;
+    private byte[] senderSign;
+    private byte[] receiverSign;
+    private byte[] secretKey;
+    private ContractState state;
+    private String discoveryHost;
+    private int discoveryPort;
+    private String reason;
 
     public String getReason() {
         return reason;
@@ -19,9 +21,6 @@ public class TransferContract {
 
     public void setReason(String reason) {
         this.reason = reason;
-    }
-
-    public TransferContract() {
     }
 
     public TransferContract(String contractAddress) {
@@ -36,10 +35,6 @@ public class TransferContract {
 
     public String getContractAddress() {
         return contractAddress;
-    }
-
-    public void setContractAddress(String contractAddress) {
-        this.contractAddress = contractAddress;
     }
 
     public String getFileName() {
@@ -113,5 +108,37 @@ public class TransferContract {
 
     public void setDiscoveryPort(int discoveryPort) {
         this.discoveryPort = discoveryPort;
+    }
+
+    @Override public boolean equals(Object o) {
+        if (this == o)
+            return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        TransferContract contract = (TransferContract)o;
+
+        return contractAddress.equals(contract.contractAddress);
+    }
+
+    @Override public int hashCode() {
+        return contractAddress.hashCode();
+    }
+
+    @Override public String toString() {
+        return "TransferContract{" +
+            "contractAddress='" + contractAddress + '\'' +
+            ", sender='" + sender + '\'' +
+            ", receiver='" + receiver + '\'' +
+            ", fileName='" + fileName + '\'' +
+            ", senderSign=" + Arrays.toString(senderSign) +
+            ", receiverSign=" + Arrays.toString(receiverSign) +
+            ", secretKey=" + Arrays.toString(secretKey) +
+            ", state=" + state +
+            ", discoveryHost='" + discoveryHost + '\'' +
+            ", discoveryPort=" + discoveryPort +
+            ", reason='" + reason + '\'' +
+            '}';
     }
 }

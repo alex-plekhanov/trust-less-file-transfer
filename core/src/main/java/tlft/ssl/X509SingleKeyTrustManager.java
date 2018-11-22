@@ -1,8 +1,8 @@
-package ssl;
+package tlft.ssl;
 
 import java.security.PublicKey;
 import java.util.Collections;
-import model.Participant;
+import tlft.model.Participant;
 
 public class X509SingleKeyTrustManager extends X509MapBasedTrustManager {
     public X509SingleKeyTrustManager(String address, PublicKey key) {

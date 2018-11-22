@@ -1,7 +1,8 @@
-package ssl;
+package tlft.ssl;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -54,7 +55,9 @@ public class SSLClientSocketFileReceiver {
         pw.flush();
 
         byte[] bufLen = new byte[4];
-        in.read(bufLen, 0, 4);
+
+        if (in.read(bufLen, 0, 4) < 4)
+            throw new IOException("Unexpected end of stream");
 
         int size = byteArrayToInt(bufLen);
 
@@ -75,6 +78,9 @@ public class SSLClientSocketFileReceiver {
 
                 total += bytesCount;
             }
+
+            if (total < size)
+                throw new Exception("Unexpected end of stream, got " + total + " bytes of file, expected " + size);
         }
 
         return outputFile;

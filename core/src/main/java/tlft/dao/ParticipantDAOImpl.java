@@ -1,10 +1,10 @@
-package dao;
+package tlft.dao;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import model.Participant;
+import tlft.model.Participant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.web3j.protocol.Web3j;
@@ -14,17 +14,10 @@ import solidity.FileTransferRegistry;
 
 public class ParticipantDAOImpl implements ParticipantDAO {
     private final Logger log = LoggerFactory.getLogger(ParticipantDAOImpl.class);
-
-    private final Web3j web3j;
-    private final FileTransferRegistry rootContract;
     private final Map<String, Participant> participantMap = new ConcurrentHashMap<>();
-    private Subscription subscription;
 
     public ParticipantDAOImpl(Web3j web3j, FileTransferRegistry rootContract) {
-        this.web3j = web3j;
-        this.rootContract = rootContract;
-
-        subscription = rootContract
+        rootContract
             .participantRegisteredEventObservable(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST)
             .subscribe(
                 event -> {

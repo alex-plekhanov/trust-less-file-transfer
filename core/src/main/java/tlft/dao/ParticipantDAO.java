@@ -1,8 +1,8 @@
-package dao;
+package tlft.dao;
 
 import java.util.Collection;
 import java.util.Map;
-import model.Participant;
+import tlft.model.Participant;
 
 public interface ParticipantDAO {
     Map<String, Participant> getAllParticipantsMap();
