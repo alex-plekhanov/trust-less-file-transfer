@@ -121,7 +121,7 @@ public class SSLServerSocketFileSender {
                 if (stopping)
                     return;
 
-                log.error("Failed to process tlft.client request", ex);
+                log.error("Failed to process client request", ex);
             }
         }
     }

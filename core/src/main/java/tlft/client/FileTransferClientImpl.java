@@ -77,13 +77,13 @@ public class FileTransferClientImpl implements FileTransferClient {
 
         web3j = Web3j.build(new HttpService());
 
-        log.info("Connected to Ethereum tlft.client version: " + web3j.web3ClientVersion().send().getWeb3ClientVersion());
+        log.info("Connected to Ethereum client version: " + web3j.web3ClientVersion().send().getWeb3ClientVersion());
 
         credentials = WalletUtils.loadCredentials(password, accountFileName);
 
         keyPair = CryptoUtil.decodeKeyPair(credentials.getEcKeyPair());
 
-        log.info("Credentials loaded, tlft.client address: " + credentials.getAddress());
+        log.info("Credentials loaded, client address: " + credentials.getAddress());
 
         initRootContract(rootContractAddress);
 
